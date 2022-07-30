@@ -17,7 +17,7 @@ namespace Controllers
         public Text uiVersion;
         
         public UserModel UserModel { get; set; }
-        public UserOfficeModel UserOfficeModel { get; private set; }
+        public UserOfficeModel UserOfficeModel { get; set; }
 
         public float PassiveIncome { get; private set; }
         public int PeopleCount { get; private set; }
@@ -44,6 +44,7 @@ namespace Controllers
             
             
             InvokeRepeating(nameof(SecondUpdate), 0.0f, 1.0f);
+            InvokeRepeating(nameof(VerySlowUpdate), 0.0f, 60.0f);
         }
 
         private void FixedUpdate()
@@ -93,6 +94,11 @@ namespace Controllers
             UserModel.Money += state.IncomeIncrease;
 
             PassiveIncome = state.IncomeIncrease;
+        }
+
+        private void VerySlowUpdate()
+        {
+            
         }
 
         public void LoadDefaultUser()
