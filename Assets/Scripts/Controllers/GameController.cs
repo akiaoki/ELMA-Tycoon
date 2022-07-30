@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ELMA.SDK.Models;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -98,7 +99,14 @@ namespace Controllers
 
         private void VerySlowUpdate()
         {
-            
+            Debug.Log("VerySlowUpdate");
+
+            UserModel.Office = UserOfficeModel;
+            Debug.Log(JsonConvert.SerializeObject(UserModel));
+            StartCoroutine(_elmaController.UpdateUser(UserModel, userResult =>
+            {
+               Debug.Log("Updated");
+            }));
         }
 
         public void LoadDefaultUser()
