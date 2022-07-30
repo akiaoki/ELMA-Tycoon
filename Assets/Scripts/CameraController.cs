@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controllers;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -10,17 +11,24 @@ public class CameraController : MonoBehaviour
     public float zoomOutMax = 8;
     public float zoomSpeed = 1.0f;
 
+    private bool _touchStarted = false;
+
     private Camera _camera;
+
+    private BuildController _buildController;
 
     private void Awake()
     {
         _camera = GetComponent<Camera>();
+        _buildController = FindObjectOfType<BuildController>();
     }
 
     private void Update () {
         if(Input.GetMouseButtonDown(0)){
             //_touchStart = _camera.ScreenToWorldPoint(Input.mousePosition);
             _touchStart = _camera.ScreenToWorldPoint(Input.mousePosition);
+            _touchStarted = true;
+            
         }
         if(Input.touchCount == 2){
             Touch touchZero = Input.GetTouch(0);
@@ -42,7 +50,25 @@ public class CameraController : MonoBehaviour
             direction.x += direction.y / 2.0f;
             direction.y = 0;
             _camera.transform.position += direction;
+            _touchStarted = true;
         }
+        else
+        {
+            var direction = _touchStart - _camera.ScreenToWorldPoint(Input.mousePosition);
+            if (_touchStarted && direction.magnitude < 0.5f)
+            {
+                RaycastHit hit;
+                var ray = _camera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, 100.0f)
+                    && hit.transform.CompareTag("Slot"))
+                {
+                    _buildController.TryBuild(hit.collider);
+                }
+            }
+            _touchStarted = false;
+        }
+        
+        
         Zoom(Input.GetAxis("Mouse ScrollWheel") * 3.0f);
     }
 

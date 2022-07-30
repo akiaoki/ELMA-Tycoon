@@ -6,8 +6,9 @@ namespace ELMA.SDK.Models
 {
     public class UserModel
     {
+        public string Nickname;
         public string CompanyName;
-        public int Money;
-        public int Level;
+        public float Money;
+        public float Level;
     }
 }

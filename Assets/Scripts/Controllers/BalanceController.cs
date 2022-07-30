@@ -6,16 +6,9 @@ namespace Controllers
 {
     public class BalanceController : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
 
-        }
+        public int maxTables = 8;
+        public int maxFurnitureItems = 16;
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }
