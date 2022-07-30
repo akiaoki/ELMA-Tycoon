@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ELMA.SDK.Models;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -8,8 +9,8 @@ namespace Controllers
 {
     public class BuildController : MonoBehaviour
     {
-        public PurchaseItemDescription selectedItem;
-        public List<PurchaseItem> ExistingPurchaseItems { get; private set; }
+        public PurchaseItemDescription selectedItem = null;
+        public Dictionary<string, PurchaseItem> ExistingPurchaseItems { get; private set; }
         public Transform[] scanPlanes;
         
         public Transform slotsPivot;
@@ -17,7 +18,7 @@ namespace Controllers
         public GameObject slotVisualPrefab;
 
         private List<Transform> _slots;
-        private bool _buildMode;
+        public bool BuildMode { get; private set; }
 
         private GameController _gameController;
 
@@ -27,11 +28,12 @@ namespace Controllers
             
             _slots = new List<Transform>();
 
-            ExistingPurchaseItems = new List<PurchaseItem>();
+            ExistingPurchaseItems = new Dictionary<string, PurchaseItem>();
             var items = Resources.LoadAll<GameObject>("PurchaseItems");
             foreach (var item in items)
             {
-                ExistingPurchaseItems.Add(item.GetComponent<PurchaseItem>());
+                var c = item.GetComponent<PurchaseItem>();
+                ExistingPurchaseItems.Add(c.description.name, c);
             }
         }
 
@@ -57,10 +59,11 @@ namespace Controllers
                             var slot = new GameObject("ItemSlot");
                             var col =slot.AddComponent<BoxCollider>();
                             col.center = Vector3.zero;
-                            col.size = new Vector3(slotSize, 0, slotSize);
+                            col.size = new Vector3(slotSize, 0.1f, slotSize);
                             slot.transform.SetParent(slotsPivot);
                             slot.transform.position = hit.point;
                             slot.tag = "Slot";
+                            slot.AddComponent<ItemSlot>();
                             var visual = Instantiate(slotVisualPrefab, slot.transform);
                             visual.transform.localScale = new Vector3(slotSize, 0.1f, slotSize);
                             visual.transform.localPosition = Vector3.zero;
@@ -75,29 +78,33 @@ namespace Controllers
                     pos.z += slotSize;
                 } while (pos.z <= maxBound.z);
             }
+            
+            ToggleBuildMode(false);
         }
 
         void Update()
         {
-
+            
         }
 
         public void ToggleBuildMode(bool state)
         {
-            _buildMode = state;
+            BuildMode = state;
             foreach (var s in _slots)
             {
                 s.gameObject.SetActive(state);
             }
         }
 
+        public void ToggleBuildMode() => ToggleBuildMode(!BuildMode);
+
         public void TryBuild(Collider collider)
         {
-            if (!_buildMode)
+            if (!BuildMode)
                 return;
-
-            var item = GetSlotItem(collider.transform);
-            if (item != null)
+            
+            var itemSlot = collider.GetComponent<ItemSlot>();
+            if (itemSlot.assignedItem != null)
             {
                 // ToDo say cannot build here
                 Debug.Log("Cannot build here");
@@ -112,7 +119,11 @@ namespace Controllers
             if (_gameController.UserModel.Money >= selectedItem.price)
             {
                 _gameController.UserModel.Money -= selectedItem.price;
-                
+                var itemObj = Instantiate(ExistingPurchaseItems[selectedItem.name].gameObject, transform);
+                itemObj.transform.position = itemSlot.transform.position;
+                itemSlot.assignedItem = itemObj;
+                _gameController.UserOfficeModel.PurchasedItems.Add(
+                    new PurchaseItemModel { Name = selectedItem.name, Location = itemObj.transform.position });
             }
             else
             {

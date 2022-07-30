@@ -64,6 +64,7 @@ public class CameraController : MonoBehaviour
                 {
                     _buildController.TryBuild(hit.collider);
                 }
+
             }
             _touchStarted = false;
         }

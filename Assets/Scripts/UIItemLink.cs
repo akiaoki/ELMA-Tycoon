@@ -6,7 +6,9 @@ public class UIItemLink : MonoBehaviour
 {
 
     public UnityEngine.UI.Text title;
+    public UnityEngine.UI.Text description;
     public UnityEngine.UI.Text price;
     public UnityEngine.UI.Image preview;
+    public UnityEngine.UI.Button button;
 
 }

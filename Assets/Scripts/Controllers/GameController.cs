@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ELMA.SDK.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Controllers
 {
     public class GameController : MonoBehaviour
     {
 
+        public Text uiMoney;
+        public Text uiIncome;
+        public Text uiPeople;
+        
         public UserModel UserModel { get; private set; }
         public UserOfficeModel UserOfficeModel { get; private set; }
+
+        public float PassiveIncome { get; private set; }
 
         private List<PurchaseItem> _purchasedItems;
 
@@ -30,6 +38,49 @@ namespace Controllers
         public void Start()
         {
             LoadDefaultUser();
+            
+            InvokeRepeating(nameof(SecondUpdate), 0.0f, 1.0f);
+        }
+
+        private void FixedUpdate()
+        {
+            uiMoney.text = UserModel?.Money + "$" ?? "-";
+            uiIncome.text = PassiveIncome + "$/s";
+
+            var people = 0;
+            if (UserOfficeModel != null)
+            {
+                foreach (var itemModel in UserOfficeModel.PurchasedItems)
+                {
+                    var item = _buildController.ExistingPurchaseItems[itemModel.Name];
+                    if (item.description.type == PurchaseItemType.Employee)
+                        people++;
+                }
+            }
+
+            uiPeople.text = "Компания: " + people;
+        }
+
+        private void SecondUpdate()
+        {
+            var state = new UpdateActionResult();
+            
+            if (UserOfficeModel != null)
+            {
+                foreach (var itemModel in UserOfficeModel.PurchasedItems)
+                {
+                    var item = _buildController.ExistingPurchaseItems[itemModel.Name];
+
+                    foreach (var action in item.actions)
+                    {
+                        action.OnActionUpdate(state);
+                    }
+                }
+            }
+            
+            UserModel.Money += state.IncomeIncrease;
+
+            PassiveIncome = state.IncomeIncrease;
         }
 
         public void LoadDefaultUser()
