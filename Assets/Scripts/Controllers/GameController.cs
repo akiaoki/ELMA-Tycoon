@@ -110,6 +110,26 @@ namespace Controllers
             };
         }
 
+        public void LoadCurrentOfficeModel()
+        {
+            foreach (var itemModel in UserOfficeModel.PurchasedItems)
+            {
+                var item = _buildController.ExistingPurchaseItems[itemModel.Name];
+
+                if (item.description.type == PurchaseItemType.Furniture)
+                {
+                    var obj = Instantiate(item, itemModel.Location, Quaternion.identity);
+                    var x = Mathf.FloorToInt(itemModel.Location.x);
+                    var z = Mathf.FloorToInt(itemModel.Location.z);
+                    if (_buildController.SlotsTable.ContainsKey((x, z)))
+                    {
+                        var slot = _buildController.SlotsTable[(x, z)];
+                        obj.transform.SetParent(slot);
+                    }
+                }
+            }
+        }
+
         public void LevelUp()
         {
             UserModel.Level++;
