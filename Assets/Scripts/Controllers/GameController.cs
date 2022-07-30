@@ -14,6 +14,7 @@ namespace Controllers
         public Text uiMoney;
         public Text uiIncome;
         public Text uiPeople;
+        public Text uiVersion;
         
         public UserModel UserModel { get; private set; }
         public UserOfficeModel UserOfficeModel { get; private set; }
@@ -33,19 +34,22 @@ namespace Controllers
             _buildController = FindObjectOfType<BuildController>();
 
             _purchasedItems = new List<PurchaseItem>();
+            
+            LoadDefaultUser();
         }
 
         public void Start()
         {
-            LoadDefaultUser();
+            
             
             InvokeRepeating(nameof(SecondUpdate), 0.0f, 1.0f);
         }
 
         private void FixedUpdate()
         {
-            uiMoney.text = UserModel?.Money + "$" ?? "-";
+            uiMoney.text = UserModel.Money + "$" ?? "-";
             uiIncome.text = PassiveIncome + "$/s";
+            uiVersion.text = "ELMA v: " + UserModel.Level;
 
             var people = 0;
             if (UserOfficeModel != null)

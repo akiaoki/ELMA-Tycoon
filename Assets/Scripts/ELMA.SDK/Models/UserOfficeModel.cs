@@ -6,7 +6,7 @@ namespace ELMA.SDK.Models
 {
     public class UserOfficeModel
     {
-
+        public string IdElma;
         public string UserNickname;
         public List<PurchaseItemModel> PurchasedItems;
 

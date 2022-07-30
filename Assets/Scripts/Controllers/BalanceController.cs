@@ -7,8 +7,29 @@ namespace Controllers
     public class BalanceController : MonoBehaviour
     {
 
-        public int maxTables = 8;
-        public int maxFurnitureItems = 16;
+        public static float TicketBonus = 1.0f;
+        public static float TicketBonusLevelMultiplier = 1.5f;
 
+        public static float TicketSpawnRate = 0.1f;
+        public static float TicketSpawnRateLevelMultiplier = 0.3f;
+
+        public static float TicketMovementSpeed = 70.0f;
+        public static float TicketMovementSpeedLevelMultiplier = 0.2f;
+
+        public static float GetTicketBonus(int level)
+        {
+            return TicketBonus + TicketBonus * level * TicketBonusLevelMultiplier;
+        }
+
+        public static float GetTicketSpawnRate(int level)
+        {
+            return TicketSpawnRate + TicketSpawnRate * TicketSpawnRateLevelMultiplier * level;
+        }
+
+        public static float GetTicketMovement(int level)
+        {
+            return TicketMovementSpeed + TicketMovementSpeed * level * TicketMovementSpeedLevelMultiplier;
+        }
+        
     }
 }
