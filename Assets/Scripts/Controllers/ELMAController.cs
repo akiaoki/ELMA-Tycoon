@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Net.Cache;
+using UnityEngine;
 using ELMA.SDK.Models;
 using System.Collections;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using System;
 
 public class ELMAController : MonoBehaviour
 {
@@ -17,8 +19,9 @@ public class ELMAController : MonoBehaviour
         
     }
 
-    // Вызывать через StartCoroutine(CreateUser(user));
-    IEnumerator CreateUser(UserModel user) {
+    // Вызывать через StartCoroutine(CreateUser(user), callback);
+    IEnumerator CreateUser(UserModel user, Action<bool> success) 
+    {
         var url = "https://radvlfsvyzgxs.t-elma365.ru/api/extensions/7b2dc10b-1758-4b01-a74b-2b1a7622ccd7/script/createPlayer";
         string jsonData = JsonConvert.SerializeObject(user);
 
@@ -29,5 +32,14 @@ public class ELMAController : MonoBehaviour
         req.SetRequestHeader("Content-Type", "application/json");
 
         yield return req.SendWebRequest();
+
+        if (req.responseCode != 204)
+        {
+            success(false);
+        }
+        else
+        {
+            success(true);
+        }
     }
 }
