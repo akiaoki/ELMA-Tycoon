@@ -42,4 +42,31 @@ public class ELMAController : MonoBehaviour
             success(true);
         }
     }
+
+    IEnumerator UserExists(string nickname, Action<bool> result) 
+    {
+        var url = "https://radvlfsvyzgxs.t-elma365.ru/api/extensions/7b2dc10b-1758-4b01-a74b-2b1a7622ccd7/script/findUserByNickname";
+        var payload = new NicknameSearchRequest();
+        payload.Nickname = nickname;
+
+        string jsonData = JsonConvert.SerializeObject(payload);
+
+        var req = new UnityWebRequest(url, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+        req.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        req.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+
+        yield return req.SendWebRequest();
+
+        if (req.responseCode != 200)
+        {
+            result(false);
+        }
+        else
+        {
+            var resPayload = JsonConvert.DeserializeObject<NicknameSearchResponse>(req.downloadHandler.text);
+            result(resPayload.IsFound);
+        }
+    }
 }
