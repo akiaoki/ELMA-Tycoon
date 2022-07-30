@@ -20,7 +20,7 @@ public class ELMAController : MonoBehaviour
     }
 
     // Вызывать через StartCoroutine(CreateUser(user), callback);
-    IEnumerator CreateUser(UserModel user, Action<bool> success) 
+    public IEnumerator CreateUser(UserModel user, Action<bool> success) 
     {
         var url = "https://radvlfsvyzgxs.t-elma365.ru/api/extensions/7b2dc10b-1758-4b01-a74b-2b1a7622ccd7/script/createPlayer";
         string jsonData = JsonConvert.SerializeObject(user);
@@ -43,7 +43,7 @@ public class ELMAController : MonoBehaviour
         }
     }
 
-    IEnumerator UserExists(string nickname, Action<bool> result) 
+    public IEnumerator UserExists(string nickname, Action<bool> result) 
     {
         var url = "https://radvlfsvyzgxs.t-elma365.ru/api/extensions/7b2dc10b-1758-4b01-a74b-2b1a7622ccd7/script/findUserByNickname";
         var payload = new NicknameSearchRequest();

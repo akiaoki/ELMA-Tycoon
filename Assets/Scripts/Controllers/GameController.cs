@@ -16,7 +16,7 @@ namespace Controllers
         public Text uiPeople;
         public Text uiVersion;
         
-        public UserModel UserModel { get; private set; }
+        public UserModel UserModel { get; set; }
         public UserOfficeModel UserOfficeModel { get; private set; }
 
         public float PassiveIncome { get; private set; }

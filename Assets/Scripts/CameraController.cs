@@ -15,7 +15,8 @@ public class CameraController : MonoBehaviour
     public float zoomSpeed = 1.0f;
 
     private bool _touchStarted = false;
-
+    private bool _ignoreTouch = false;
+    
     private Camera _camera;
 
     private BuildController _buildController;
@@ -31,7 +32,10 @@ public class CameraController : MonoBehaviour
             //_touchStart = _camera.ScreenToWorldPoint(Input.mousePosition);
             _touchStart = _camera.ScreenToWorldPoint(Input.mousePosition);
             _touchStarted = true;
-            
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                _ignoreTouch = true;
+            }
         }
         if(Input.touchCount == 2){
             Touch touchZero = Input.GetTouch(0);
@@ -52,17 +56,19 @@ public class CameraController : MonoBehaviour
             direction.z += direction.y / 2.0f;
             direction.x += direction.y / 2.0f;
             direction.y = 0;
-            _camera.transform.position += direction;
+            if (!_ignoreTouch)
+                _camera.transform.position += direction;
             _touchStarted = true;
         }
         else
         {
+            _ignoreTouch = false;
             var direction = _touchStart - _camera.ScreenToWorldPoint(Input.mousePosition);
             if (_touchStarted && direction.magnitude < 0.5f)
             {
                 RaycastHit hit;
                 var ray = _camera.ScreenPointToRay(Input.mousePosition);
-                bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+                var isOverUI = EventSystem.current.IsPointerOverGameObject();
                 if (Physics.Raycast(ray, out hit, 100.0f)
                     && hit.transform.CompareTag("Slot") && !isOverUI)
                 {
