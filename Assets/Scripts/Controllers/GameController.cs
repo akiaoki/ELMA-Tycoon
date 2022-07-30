@@ -20,6 +20,7 @@ namespace Controllers
         public UserOfficeModel UserOfficeModel { get; private set; }
 
         public float PassiveIncome { get; private set; }
+        public int PeopleCount { get; private set; }
 
         private List<PurchaseItem> _purchasedItems;
 
@@ -63,6 +64,13 @@ namespace Controllers
             }
 
             uiPeople.text = "Компания: " + people;
+            PeopleCount = people;
+            
+            var nextLevel = BalanceController.GetLevelUpPeopleRequired(UserModel.Level);
+            if (PeopleCount >= nextLevel)
+            {
+                LevelUp();
+            }
         }
 
         private void SecondUpdate()
@@ -93,13 +101,18 @@ namespace Controllers
             {
                 CompanyName = "ELMA",
                 Level = 1,
-                Money = 100.0f,
+                Money = 1000.0f,
                 Nickname = "Player"
             };
             UserOfficeModel = new UserOfficeModel()
             {
                 PurchasedItems = new List<PurchaseItemModel>()
             };
+        }
+
+        public void LevelUp()
+        {
+            UserModel.Level++;
         }
     }
 }

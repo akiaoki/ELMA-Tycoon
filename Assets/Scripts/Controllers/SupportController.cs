@@ -15,6 +15,8 @@ namespace Controllers
         private BuildController _buildController;
         private GameController _gameController;
 
+        private float _spawnTimeout = 1.0f;
+        
         private void Awake()
         {
             _buildController = FindObjectOfType<BuildController>();
@@ -23,7 +25,19 @@ namespace Controllers
 
         private void Start()
         {
-            InvokeRepeating(nameof(SpawnTicket), 1.0f, 1.0f / BalanceController.GetTicketSpawnRate(_gameController.UserModel.Level));
+            
+        }
+
+        private void Update()
+        {
+            if (_spawnTimeout - Time.deltaTime <= 0)
+            {
+                _spawnTimeout = 1.0f / BalanceController.GetTicketSpawnRate(_gameController.UserModel.Level);
+                SpawnTicket();
+                return;
+            }
+
+            _spawnTimeout -= Time.deltaTime;
         }
 
         public void ToggleMenu()

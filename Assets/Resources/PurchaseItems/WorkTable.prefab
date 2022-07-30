@@ -50,7 +50,7 @@ MonoBehaviour:
     name: worktable
     visualName: "\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0421\u0442\u043E\u043B"
     type: 0
-    price: 25
+    price: 1000
     preview: {fileID: 21300000, guid: 4bbee3c1c64abeb428c15a39db1ae6dc, type: 3}
   actions: []
 --- !u!1001 &3940852621190154643
