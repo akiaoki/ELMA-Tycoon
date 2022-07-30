@@ -7,7 +7,7 @@ namespace Controllers
     public class BalanceController : MonoBehaviour
     {
 
-        public static float TicketBonus = 1.0f;
+        public static float TicketBonus = 40.0f;
         public static float TicketBonusLevelMultiplier = 1.5f;
 
         public static float TicketSpawnRate = 0.2f;

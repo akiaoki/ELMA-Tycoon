@@ -9,6 +9,18 @@ namespace ELMA.SDK.Models
     {
         [JsonProperty("name")]
         public string Name;
-        public Vector3 Location;
+
+        public Vector3 Location
+        {
+            get => new Vector3(X, Y, Z);
+            set
+            {
+                X = value.x;
+                Y = value.y;
+                Z = value.z;
+            }
+        }
+        public float X, Y, Z;
+        
     }
 }

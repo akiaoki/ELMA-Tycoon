@@ -46,6 +46,13 @@ namespace Controllers
                 else
                 {
                     Debug.Log("User exists");
+
+                    StartCoroutine(_elmaController.GetUser(loginField.text, userResult =>
+                    {
+                        _gameController.UserModel = userResult;
+                        
+                    }));
+
                 }
             }));
         }
