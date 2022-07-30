@@ -69,4 +69,35 @@ public class ELMAController : MonoBehaviour
             result(resPayload.IsFound);
         }
     }
+
+    public IEnumerator GetUser(string nickname, Action<UserModel> result) 
+    {
+        var url = "https://radvlfsvyzgxs.t-elma365.ru/api/extensions/7b2dc10b-1758-4b01-a74b-2b1a7622ccd7/script/getDataPlayer";
+        var payload = new NicknameSearchRequest();
+        payload.Nickname = nickname;
+
+        string jsonData = JsonConvert.SerializeObject(payload);
+        Debug.Log(jsonData);
+
+        var req = new UnityWebRequest(url, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+        req.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        req.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+
+        yield return req.SendWebRequest();
+
+        Debug.Log(req.responseCode);
+
+        if (req.responseCode != 200)
+        {
+            result(new UserModel());
+        }
+        else
+        {
+            Debug.Log(req.downloadHandler.text);
+            var resPayload = JsonConvert.DeserializeObject<UserModel>(req.downloadHandler.text);
+            result(resPayload);
+        }
+    }
 }

@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace ELMA.SDK.Models
 {
     public class PurchaseItemModel : ElmaModel
     {
-        public string IdElma;
+        [JsonProperty("name")]
         public string Name;
         public Vector3 Location;
-
     }
 }

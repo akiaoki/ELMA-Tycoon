@@ -18,5 +18,7 @@ namespace ELMA.SDK.Models
         public float Money;
         [JsonProperty("level")]
         public int Level;
+        [JsonProperty("ofice")]
+        public UserOfficeModel Office;
     }
 }
