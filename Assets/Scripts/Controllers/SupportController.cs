@@ -52,7 +52,7 @@ namespace Controllers
             
             var ticket = Instantiate(uiTicketPrefab.gameObject, uiTicketPrefab.transform.parent);
             var rt = (RectTransform)ticket.transform;
-            var maxX = 200.0f;
+            var maxX = 100.0f;
             var x = UnityEngine.Random.Range(-maxX, maxX);
             rt.anchoredPosition = new Vector2(x, 500.0f);
             ticket.gameObject.SetActive(true);

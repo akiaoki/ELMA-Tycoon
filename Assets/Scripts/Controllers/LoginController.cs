@@ -50,7 +50,8 @@ namespace Controllers
                     StartCoroutine(_elmaController.GetUser(loginField.text, userResult =>
                     {
                         _gameController.UserModel = userResult;
-                        
+                        _gameController.UserOfficeModel = userResult.Office;
+                        _gameController.LoadCurrentOfficeModel();
                     }));
 
                 }
