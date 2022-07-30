@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ELMA.SDK.Models
 {
-    public class UserOfficeModel
+    public class UserOfficeModel : ElmaModel
     {
         public string IdElma;
         public string UserNickname;

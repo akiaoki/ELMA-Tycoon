@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace ELMA.SDK.Models
 {
-    public class UserModel
+    public class UserModel : ElmaModel
     {
         [JsonProperty("idElma")]
         public string IdElma;

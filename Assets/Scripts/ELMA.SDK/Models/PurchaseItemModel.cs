@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ELMA.SDK.Models
 {
-    public class PurchaseItemModel
+    public class PurchaseItemModel : ElmaModel
     {
         public string IdElma;
         public string Name;
