@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Controllers;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {
     private Vector3 _touchStart;
+    public GraphicRaycaster graphicRaycaster;
     public float zoomOutMin = 1;
     public float zoomOutMax = 8;
     public float zoomSpeed = 1.0f;
@@ -59,8 +62,9 @@ public class CameraController : MonoBehaviour
             {
                 RaycastHit hit;
                 var ray = _camera.ScreenPointToRay(Input.mousePosition);
+                bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
                 if (Physics.Raycast(ray, out hit, 100.0f)
-                    && hit.transform.CompareTag("Slot"))
+                    && hit.transform.CompareTag("Slot") && !isOverUI)
                 {
                     _buildController.TryBuild(hit.collider);
                 }
@@ -74,6 +78,6 @@ public class CameraController : MonoBehaviour
     }
 
     private void Zoom(float increment){
-        _camera.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment * zoomSpeed, zoomOutMin, zoomOutMax);
+        _camera.orthographicSize = Mathf.Clamp(_camera.orthographicSize - increment * zoomSpeed, zoomOutMin, zoomOutMax);
     }
 }

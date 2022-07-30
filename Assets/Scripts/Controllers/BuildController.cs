@@ -111,7 +111,7 @@ namespace Controllers
                 return;
             }
 
-            if (selectedItem == null)
+            if (selectedItem == null || string.IsNullOrEmpty(selectedItem.name))
             {
                 return;
             }
