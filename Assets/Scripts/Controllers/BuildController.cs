@@ -17,6 +17,8 @@ namespace Controllers
         public int slotSize;
         public GameObject slotVisualPrefab;
 
+        public Dictionary<(int, int), Transform> SlotsTable { get; private set; }
+
         private List<Transform> _slots;
         public bool BuildMode { get; private set; }
 
@@ -27,6 +29,7 @@ namespace Controllers
             _gameController = FindObjectOfType<GameController>();
             
             _slots = new List<Transform>();
+            SlotsTable = new Dictionary<(int, int), Transform>();
 
             ExistingPurchaseItems = new Dictionary<string, PurchaseItem>();
             var items = Resources.LoadAll<GameObject>("PurchaseItems");
@@ -68,6 +71,7 @@ namespace Controllers
                             visual.transform.localScale = new Vector3(slotSize, 0.1f, slotSize);
                             visual.transform.localPosition = Vector3.zero;
                             _slots.Add(slot.transform);
+                            SlotsTable.Add((Mathf.RoundToInt(slot.transform.position.x), Mathf.RoundToInt(slot.transform.position.z)), slot.transform);
                         }
                         
                         pos.x += slotSize;
